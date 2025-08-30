@@ -1,7 +1,7 @@
 from typing import List, Dict
 import pandas as pd
 
-def predict_video_preferences_with_model(model, video_features: pd.DataFrame) -> List[Dict]:
+def predict_video_preferences_with_model(model, video_features: pd.DataFrame, top_n: int = 10) -> List[Dict]:
     if video_features.empty:
         return []
 
@@ -17,7 +17,7 @@ def predict_video_preferences_with_model(model, video_features: pd.DataFrame) ->
     video_features_copy = video_features.copy()
     video_features_copy['like_probability'] = probabilities
 
-    top_videos = video_features_copy.nlargest(10, 'like_probability')
+    top_videos = video_features_copy.nlargest(top_n, 'like_probability')
 
     recommendations = []
     for _, row in top_videos.iterrows():

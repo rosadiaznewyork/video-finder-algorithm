@@ -54,8 +54,10 @@ echo "1. 🌐 Launch Dashboard (recommended)"
 echo "2. 📱 Interactive CLI Rating Session"  
 echo "3. 🔍 Search for More Videos"
 echo "4. 🛠️ Full Setup (Search + Rate + Dashboard)"
+echo "5. 🎯 Search Videos by Topic (AI-powered)"
+echo "6. 🎬 Topic Rating Session (Search + Rate by Topic)"
 echo ""
-read -p "Enter choice (1-4): " choice
+read -p "Enter choice (1-6): " choice
 
 case $choice in
     1)
@@ -98,6 +100,79 @@ case $choice in
         echo "💡 Tip: Rate at least 10 videos to activate AI recommendations"
         echo "   (You can press 'q' anytime to skip to dashboard)"
         python main.py
+        ;;
+    5)
+        echo ""
+        echo "🎯 Search Videos by Topic (AI-powered)"
+        echo "----------------------------------------"
+        
+        # Check if Ollama is running
+        if command -v ollama &> /dev/null; then
+            if ollama list &> /dev/null; then
+                echo "✅ Ollama is installed and running"
+            else
+                echo "⚠️  Ollama is installed but not running"
+                echo "   Start Ollama with: ollama serve"
+                echo ""
+                read -p "Continue with fallback mode? (y/n): " fallback_choice
+                if [ "$fallback_choice" != "y" ]; then
+                    echo "Exiting..."
+                    exit 0
+                fi
+                python search_by_topic.py --fallback
+                exit 0
+            fi
+        else
+            echo "⚠️  Ollama is not installed"
+            echo "   To install Ollama, visit: https://ollama.ai"
+            echo "   Or use fallback mode for basic keyword generation"
+            echo ""
+            read -p "Continue with fallback mode? (y/n): " fallback_choice
+            if [ "$fallback_choice" != "y" ]; then
+                echo "Exiting..."
+                exit 0
+            fi
+            python search_by_topic.py --fallback
+            exit 0
+        fi
+        
+        echo ""
+        python search_by_topic.py
+        echo ""
+        echo "✅ Topic search complete! You can now:"
+        echo "   • Run './setup.sh' again and choose option 1 for Dashboard"
+        echo "   • Run 'python dashboard_api.py' directly"
+        ;;
+    6)
+        echo ""
+        echo "🎬 Topic Rating Session"
+        echo "----------------------------------------"
+        echo "Search for videos on specific topics and rate them immediately!"
+        echo ""
+        
+        # Check if Ollama is running
+        if command -v ollama &> /dev/null; then
+            if ollama list &> /dev/null; then
+                echo "✅ Ollama is installed and running"
+                python topic_rate.py --continuous
+            else
+                echo "⚠️  Ollama is installed but not running"
+                echo "   Start Ollama with: ollama serve"
+                echo "   Using fallback mode for keyword generation..."
+                echo ""
+                python topic_rate.py --continuous --fallback
+            fi
+        else
+            echo "⚠️  Ollama is not installed"
+            echo "   Using fallback mode for keyword generation..."
+            echo ""
+            python topic_rate.py --continuous --fallback
+        fi
+        
+        echo ""
+        echo "✅ Topic rating session complete!"
+        echo "   • Run './setup.sh' again and choose option 1 for Dashboard"
+        echo "   • Run 'python dashboard_api.py' to see your recommendations"
         ;;
     *)
         echo "❌ Invalid choice. Please run './setup.sh' again."

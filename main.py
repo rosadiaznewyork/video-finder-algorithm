@@ -1,15 +1,13 @@
 import os
 from dotenv import load_dotenv
 
+from src.config.app_config import AppConfig
+from src.services.video_search_service import VideoSearchService
 from src.database.manager import setup_database_tables
-from src.database.video_operations import save_videos_to_database, save_video_features_to_database, get_unrated_videos_from_database
+from src.database.video_operations import get_unrated_videos_from_database
 from src.database.preference_operations import save_video_rating_to_database, get_training_data_from_database, get_unrated_videos_with_features_from_database, get_rated_count_from_database
 
-from src.youtube.search import search_youtube_videos_by_query, get_coding_search_queries
-from src.youtube.details import get_video_details_from_youtube
-from src.youtube.utils import remove_duplicate_videos
-
-from src.ml.feature_extraction import extract_all_features_from_video
+from src.youtube.search import get_coding_search_queries
 from src.ml.model_training import create_recommendation_model, train_model_on_user_preferences
 from src.ml.predictions import predict_video_preferences_with_model
 
@@ -22,32 +20,26 @@ load_dotenv()
 class VideoInspirationFinderApp:
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.db_path = "video_inspiration.db"
+        self.db_path = AppConfig.DATABASE_PATH
         self.model = None
         self.model_trained = False
         
         setup_database_tables(self.db_path)
 
     def search_and_save_coding_videos(self):
+        """Search and save coding videos using the VideoSearchService."""
         print("🔍 Searching for coding videos...")
         
-        all_videos = []
-        search_queries = get_coding_search_queries()
+        # Use the new VideoSearchService for clean, unified search
+        search_service = VideoSearchService(self.api_key, self.db_path)
+        search_queries = get_coding_search_queries()[:5]  # Use first 5 queries
         
-        for query in search_queries[:5]:
-            video_ids = search_youtube_videos_by_query(self.api_key, query, 10)
-            videos = get_video_details_from_youtube(self.api_key, video_ids)
-            all_videos.extend(videos)
+        unique_videos = search_service.search_and_save_videos(
+            queries=search_queries, 
+            max_results_per_query=AppConfig.DEFAULT_RESULTS_PER_QUERY
+        )
         
-        unique_videos = remove_duplicate_videos(all_videos)
-        
-        save_videos_to_database(unique_videos, self.db_path)
-        
-        for video in unique_videos:
-            features = extract_all_features_from_video(video)
-            save_video_features_to_database(video['id'], features, self.db_path)
-        
-        print(f"Found and saved {len(unique_videos)} videos")
+        print(f"🏁 Search complete! Found and saved {len(unique_videos)} videos")
 
     def start_interactive_rating_session(self):
         display_rating_session_header()
@@ -82,11 +74,11 @@ class VideoInspirationFinderApp:
             video_features = get_unrated_videos_with_features_from_database(self.db_path)
             return predict_video_preferences_with_model(self.model, video_features)
         else:
-            return get_unrated_videos_from_database(10, self.db_path)
+            return get_unrated_videos_from_database(AppConfig.DEFAULT_RESULTS_PER_QUERY, self.db_path)
 
     def _try_train_model(self):
         if not self.model_trained:
-            if not self.model:
+            if self.model is None:
                 self.model = create_recommendation_model()
             
             training_data = get_training_data_from_database(self.db_path)

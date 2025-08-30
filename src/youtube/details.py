@@ -2,32 +2,16 @@ import requests
 import json
 from typing import List, Dict
 
+from src.services.youtube_client import YouTubeAPIClient
+from src.config.app_config import YouTubeConfig
+
 def get_video_details_from_youtube(api_key: str, video_ids: List[str]) -> List[Dict]:
-    if not video_ids:
-        return []
-
-    details_url = "https://www.googleapis.com/youtube/v3/videos"
-    params = {
-        'key': api_key,
-        'id': ','.join(video_ids),
-        'part': 'snippet,statistics,contentDetails'
-    }
-
-    try:
-        response = requests.get(details_url, params=params)
-        data = response.json()
-
-        videos = []
-        for item in data.get('items', []):
-            video = parse_youtube_video_response(item)
-            if is_relevant_coding_video(video):
-                videos.append(video)
-
-        return videos
-
-    except Exception as e:
-        print(f"Error getting video details: {e}")
-        return []
+    """
+    Legacy function for backward compatibility.
+    Uses the new unified YouTubeAPIClient internally.
+    """
+    client = YouTubeAPIClient(api_key)
+    return client.get_video_details(video_ids)
 
 def parse_youtube_video_response(item: Dict) -> Dict:
     snippet = item['snippet']
@@ -50,18 +34,20 @@ def parse_youtube_video_response(item: Dict) -> Dict:
     }
 
 def is_relevant_coding_video(video: Dict) -> bool:
-    title = video['title'].lower()
-    description = video['description'].lower()
+    """
+    Check if a video is relevant to coding/programming projects.
+    Uses centralized keywords from YouTubeConfig.
+    """
+    title_lower = video['title'].lower()
+    description_lower = video['description'].lower()
 
-    programming_keywords = [
-        'coding', 'programming', 'javascript', 'python', 'react', 'web development',
-        'tutorial', 'learn', 'build', 'create', 'app', 'website', 'algorithm', 'ai'
-    ]
-
-    if video['view_count'] < 100000:
+    # Use minimum view count from config
+    if video['view_count'] < YouTubeConfig.MIN_VIEW_COUNT_THRESHOLD:
         return False
 
-    has_programming = any(keyword in title or keyword in description
-                        for keyword in programming_keywords)
+    # Check if any programming keywords are in title or description
+    for keyword in YouTubeConfig.PROGRAMMING_KEYWORDS:
+        if keyword in title_lower or keyword in description_lower:
+            return True
 
-    return has_programming
+    return False

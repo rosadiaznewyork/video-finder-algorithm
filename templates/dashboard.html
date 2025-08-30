@@ -259,6 +259,182 @@
             cursor: not-allowed;
         }
 
+        .remove-btn {
+            padding: 6px 12px;
+            border: 1px solid #ff4444;
+            border-radius: 20px;
+            background-color: transparent;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            justify-self: center;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .remove-btn:hover {
+            background-color: #ff4444;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .remove-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .search-session-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .search-session-card:hover {
+            background-color: #252525;
+            border-color: #555;
+        }
+
+        .search-session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .search-session-topic {
+            font-size: 18px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .search-session-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .search-session-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .session-action-btn {
+            padding: 6px 12px;
+            border: 1px solid #555;
+            border-radius: 16px;
+            background-color: transparent;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .session-action-btn:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        .session-action-btn.delete-btn {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .session-action-btn.delete-btn:hover {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d400;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .cleanup-controls {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .cleanup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .cleanup-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .cleanup-controls input {
+            background-color: #222;
+            border: 1px solid #555;
+            border-radius: 6px;
+            color: white;
+            padding: 8px 12px;
+            width: 80px;
+            margin-right: 12px;
+        }
+
+        .cleanup-btn {
+            padding: 8px 16px;
+            background-color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .cleanup-btn:hover {
+            background-color: #ff5252;
+        }
+
+        .cleanup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .nav-buttons {
             display: flex;
             gap: 8px;
@@ -349,8 +525,8 @@
         </div>
         
         <div class="search-container">
-            <input type="text" class="search-box" placeholder="Search coding videos..." disabled>
-            <button class="search-button">🔍</button>
+            <input type="text" class="search-box" placeholder="Search by topic (e.g., 'machine learning', 'react hooks')..." id="searchInput">
+            <button class="search-button" onclick="performTopicSearch()" id="searchButton">🔍</button>
         </div>
         
         <div class="nav-buttons">
@@ -359,6 +535,12 @@
             </button>
             <button class="nav-btn" id="likedBtn" onclick="switchView('liked')">
                 🎯 MyTube
+            </button>
+            <button class="nav-btn" id="searchBtn" onclick="switchView('search')" style="display: none;">
+                🔍 Search Results
+            </button>
+            <button class="nav-btn" id="historyBtn" onclick="switchView('history')">
+                📜 Search History
             </button>
         </div>
     </header>
@@ -390,8 +572,97 @@
                 <span class="ai-badge">AI CURATED</span>
             </h1>
             
+            <!-- Add Video Input Section -->
+            <div id="addVideoSection" style="display: none; margin-bottom: 24px;">
+                <div style="background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px;">
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 16px; font-weight: 500; color: #ffffff; display: block; margin-bottom: 8px;">
+                            ➕ Add a YouTube Video to MyTube
+                        </label>
+                        <div style="font-size: 12px; color: #aaa; margin-bottom: 12px;">
+                            Paste a YouTube URL or video ID to add it directly to your liked videos
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <input 
+                            type="text" 
+                            id="addVideoInput" 
+                            placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ or dQw4w9WgXcQ"
+                            style="flex-grow: 1; padding: 12px 16px; border: 1px solid #333; border-radius: 40px; background-color: #121212; color: white; font-size: 14px; outline: none;"
+                            onkeypress="if(event.key === 'Enter') addVideoByUrl()"
+                        >
+                        <button 
+                            onclick="addVideoByUrl()" 
+                            id="addVideoButton"
+                            style="padding: 12px 24px; border: 1px solid #00d400; border-radius: 40px; background-color: #00d400; color: black; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.2s ease;"
+                            onmouseover="this.style.backgroundColor='#00ff00'" 
+                            onmouseout="this.style.backgroundColor='#00d400'"
+                        >
+                            Add Video
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
             <div class="video-grid" id="likedVideoGrid">
                 <!-- Liked videos will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Search Results View -->
+        <div class="view-container" id="searchView">
+            <div id="searchResultsHeader" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h1 class="section-title" id="searchSectionTitle">
+                        Search Results
+                        <span class="ai-badge">FRESH SEARCH</span>
+                    </h1>
+                    <button class="nav-btn" onclick="clearSearchResults()" style="margin: 0;">
+                        ✕ Clear Results
+                    </button>
+                </div>
+                <div id="searchMetadata" style="margin-bottom: 20px; color: #aaa;">
+                    <!-- Search metadata will be shown here -->
+                </div>
+            </div>
+            
+            <div class="video-grid" id="searchVideoGrid">
+                <!-- Search results will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Search History View -->
+        <div class="view-container" id="historyView">
+            <h1 class="section-title" id="historySectionTitle" style="display: none;">
+                Search History
+                <span class="ai-badge">MANAGE</span>
+            </h1>
+            
+            <!-- Statistics Grid -->
+            <div class="stats-grid" id="statsGrid" style="display: none;">
+                <!-- Stats will be loaded here -->
+            </div>
+            
+            <!-- Cleanup Controls -->
+            <div class="cleanup-controls" id="cleanupControls" style="display: none;">
+                <div class="cleanup-header">
+                    <div class="cleanup-title">🧹 Cleanup Old Searches</div>
+                </div>
+                <div>
+                    <input type="number" id="cleanupDays" value="7" min="1" max="365">
+                    <span style="color: #aaa; margin-right: 12px;">days old</span>
+                    <button class="cleanup-btn" onclick="cleanupSearches()" id="cleanupBtn">
+                        Clean Up
+                    </button>
+                </div>
+                <div style="margin-top: 8px; font-size: 12px; color: #aaa;">
+                    This will archive (not delete) search sessions older than the specified days.
+                </div>
+            </div>
+            
+            <!-- Search Sessions List -->
+            <div id="searchSessionsList">
+                <!-- Search sessions will be loaded here -->
             </div>
         </div>
     </main>
@@ -599,17 +870,19 @@
         function displayLikedVideos(videos) {
             const likedVideoGrid = document.getElementById('likedVideoGrid');
             const likedSectionTitle = document.getElementById('likedSectionTitle');
+            const addVideoSection = document.getElementById('addVideoSection');
+            
+            // Always show the add video section and title
+            likedSectionTitle.style.display = 'flex';
+            addVideoSection.style.display = 'block';
             
             if (videos.length === 0) {
-                likedVideoGrid.innerHTML = '<div class="loading">No videos curated yet. Rate some videos and I\'ll learn what you love!</div>';
-                likedSectionTitle.style.display = 'none';
+                likedVideoGrid.innerHTML = '<div class="loading">No videos in MyTube yet. Add videos manually or rate some recommendations!</div>';
                 return;
             }
             
-            likedSectionTitle.style.display = 'flex';
-            
             likedVideoGrid.innerHTML = videos.map(video => `
-                <div class="video-card">
+                <div class="video-card" id="liked-card-${video.id}">
                     <div class="video-thumbnail" onclick="openVideo('${video.url}')">
                         <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22180%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22>No Image</text></svg>'">
                         <div class="confidence-badge confidence-high">
@@ -623,6 +896,9 @@
                             <span>•</span>
                             <span>${video.views_formatted}</span>
                         </div>
+                        <button class="remove-btn" onclick="removeLikedVideo('${video.id}')" id="remove-${video.id}">
+                            🗑️ Remove
+                        </button>
                     </div>
                 </div>
             `).join('');
@@ -638,6 +914,68 @@
             `;
         }
 
+        async function removeLikedVideo(videoId) {
+            const removeBtn = document.getElementById(`remove-${videoId}`);
+            const videoCard = document.getElementById(`liked-card-${videoId}`);
+            
+            // Disable button during request
+            removeBtn.disabled = true;
+            removeBtn.textContent = '🗑️ Removing...';
+            
+            try {
+                const response = await fetch('/api/remove-liked', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        video_id: videoId
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Remove video card with animation
+                    videoCard.style.transition = 'all 0.3s ease';
+                    videoCard.style.transform = 'scale(0.8)';
+                    videoCard.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        videoCard.remove();
+                        
+                        // Check if there are any videos left
+                        const remainingCards = document.querySelectorAll('#likedVideoGrid .video-card');
+                        if (remainingCards.length === 0) {
+                            displayLikedVideos([]); // Show empty state
+                        } else {
+                            // Update count in status bar
+                            updateLikedStatusBar(remainingCards.length);
+                        }
+                    }, 300);
+                    
+                    // Show feedback
+                    showNotification('Video removed from MyTube 🗑️');
+                    
+                    // Show model retrained notification if applicable
+                    if (result.model_retrained) {
+                        setTimeout(() => {
+                            showNotification('🤖 AI model updated with your changes!');
+                        }, 1500);
+                    }
+                } else {
+                    throw new Error(result.error || 'Failed to remove video');
+                }
+            } catch (error) {
+                console.error('Error removing video:', error);
+                showNotification('Failed to remove video: ' + error.message);
+                
+                // Reset button state on error
+                removeBtn.disabled = false;
+                removeBtn.textContent = '🗑️ Remove';
+            }
+        }
+
         let currentView = 'rating';
 
         function switchView(view) {
@@ -646,18 +984,584 @@
             // Update navigation buttons
             document.getElementById('ratingBtn').classList.toggle('active', view === 'rating');
             document.getElementById('likedBtn').classList.toggle('active', view === 'liked');
+            document.getElementById('searchBtn').classList.toggle('active', view === 'search');
+            document.getElementById('historyBtn').classList.toggle('active', view === 'history');
             
             // Update view containers
             document.getElementById('ratingView').classList.toggle('active', view === 'rating');
             document.getElementById('likedView').classList.toggle('active', view === 'liked');
+            document.getElementById('searchView').classList.toggle('active', view === 'search');
+            document.getElementById('historyView').classList.toggle('active', view === 'history');
             
             // Load appropriate data
             if (view === 'rating') {
                 loadRecommendations();
             } else if (view === 'liked') {
                 loadLikedVideos();
+            } else if (view === 'search') {
+                // Search results are loaded by performTopicSearch()
+            } else if (view === 'history') {
+                loadSearchHistory();
             }
         }
+
+        async function loadSearchHistory() {
+            try {
+                const response = await fetch('/api/search-history');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to load search history');
+                }
+                
+                displaySearchHistory(data.sessions, data.stats);
+                updateHistoryStatusBar(data.sessions.length, data.stats);
+                
+            } catch (error) {
+                console.error('Error loading search history:', error);
+                document.getElementById('searchSessionsList').innerHTML = 
+                    `<div class="error">Failed to load search history: ${error.message}</div>`;
+            }
+        }
+
+        function displaySearchHistory(sessions, stats) {
+            const sessionsList = document.getElementById('searchSessionsList');
+            const historySectionTitle = document.getElementById('historySectionTitle');
+            const statsGrid = document.getElementById('statsGrid');
+            const cleanupControls = document.getElementById('cleanupControls');
+            
+            // Show sections
+            historySectionTitle.style.display = 'flex';
+            statsGrid.style.display = 'grid';
+            cleanupControls.style.display = 'block';
+            
+            // Display statistics
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.active_sessions}</div>
+                    <div class="stat-label">Active Sessions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.search_videos}</div>
+                    <div class="stat-label">Videos from Searches</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.recent_sessions}</div>
+                    <div class="stat-label">Recent (7 days)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.archived_sessions}</div>
+                    <div class="stat-label">Archived Sessions</div>
+                </div>
+            `;
+            
+            if (sessions.length === 0) {
+                sessionsList.innerHTML = `
+                    <div class="loading">
+                        No search sessions found. Search for videos by topic to see them here!
+                    </div>
+                `;
+                return;
+            }
+            
+            // Display search sessions
+            sessionsList.innerHTML = sessions.map(session => `
+                <div class="search-session-card" id="session-${session.id}">
+                    <div class="search-session-header">
+                        <div>
+                            <div class="search-session-topic">${session.topic}</div>
+                            <div class="search-session-meta">
+                                <span>${session.video_count} videos</span>
+                                <span>•</span>
+                                <span>${session.time_ago}</span>
+                                <span>•</span>
+                                <span class="status-${session.status}">${session.status}</span>
+                            </div>
+                        </div>
+                        <div class="search-session-actions">
+                            <button class="session-action-btn" onclick="viewSessionVideos('${session.id}', '${session.topic}')">
+                                👀 View Videos
+                            </button>
+                            <button class="session-action-btn delete-btn" onclick="deleteSearchSession('${session.id}')">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateHistoryStatusBar(sessionCount, stats) {
+            const statusBar = document.getElementById('statusBar');
+            statusBar.innerHTML = `
+                <div class="status-trained">
+                    📜 Search History • ${sessionCount} active sessions • ${stats.search_videos} videos from searches
+                </div>
+            `;
+        }
+
+        async function viewSessionVideos(sessionId, topic) {
+            try {
+                const response = await fetch(`/api/search-session/${sessionId}`);
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to load session videos');
+                }
+                
+                // Switch to a session-specific view (for now, show in liked view format)
+                displaySessionVideos(data.videos, topic, sessionId);
+                showNotification(`Viewing ${data.videos.length} videos from "${topic}" search`);
+                
+            } catch (error) {
+                console.error('Error loading session videos:', error);
+                showNotification('Failed to load session videos: ' + error.message);
+            }
+        }
+
+        function displaySessionVideos(videos, topic, sessionId) {
+            const sessionsList = document.getElementById('searchSessionsList');
+            
+            if (videos.length === 0) {
+                sessionsList.innerHTML = `
+                    <div class="loading">
+                        <p>No videos found in this search session.</p>
+                        <button class="nav-btn" onclick="loadSearchHistory()" style="margin-top: 16px;">
+                            ← Back to Search History
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Create a back button and video grid
+            sessionsList.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <button class="nav-btn" onclick="loadSearchHistory()" style="margin-bottom: 16px;">
+                        ← Back to Search History
+                    </button>
+                    <h2 style="color: white; margin-bottom: 20px;">Videos from "${topic}" search</h2>
+                </div>
+                <div class="video-grid">
+                    ${videos.map(video => `
+                        <div class="video-card">
+                            <div class="video-thumbnail" onclick="openVideo('${video.url}')">
+                                <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22180%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22>No Image</text></svg>'">
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title" onclick="openVideo('${video.url}')" style="cursor: pointer;">${video.title}</div>
+                                <div class="video-meta">
+                                    <span>${video.channel_name}</span>
+                                    <span>•</span>
+                                    <span>${video.views_formatted}</span>
+                                </div>
+                                <div class="rating-buttons">
+                                    <button class="rating-btn like-btn" onclick="rateVideo('${video.id}', true)" id="like-${video.id}">
+                                        👍 Like
+                                    </button>
+                                    <button class="rating-btn dislike-btn" onclick="rateVideo('${video.id}', false)" id="dislike-${video.id}">
+                                        👎 Dislike
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        async function deleteSearchSession(sessionId) {
+            if (!confirm('Are you sure you want to delete this search session? This cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/delete-search-session/${sessionId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        remove_videos: false // Keep videos, just remove session link
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Remove the session card with animation
+                    const sessionCard = document.getElementById(`session-${sessionId}`);
+                    sessionCard.style.transition = 'all 0.3s ease';
+                    sessionCard.style.transform = 'scale(0.8)';
+                    sessionCard.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        sessionCard.remove();
+                    }, 300);
+                    
+                    showNotification('Search session deleted 🗑️');
+                    
+                    // Reload to update statistics
+                    setTimeout(() => {
+                        loadSearchHistory();
+                    }, 1000);
+                } else {
+                    throw new Error(result.error || 'Failed to delete search session');
+                }
+            } catch (error) {
+                console.error('Error deleting search session:', error);
+                showNotification('Failed to delete session: ' + error.message);
+            }
+        }
+
+        async function addVideoByUrl() {
+            const input = document.getElementById('addVideoInput');
+            const button = document.getElementById('addVideoButton');
+            const url = input.value.trim();
+            
+            if (!url) {
+                showNotification('Please enter a YouTube URL or video ID');
+                input.focus();
+                return;
+            }
+            
+            // Basic validation
+            const validPatterns = [
+                /^[a-zA-Z0-9_-]{11}$/,  // Video ID
+                /youtube\.com\/watch\?v=/,  // Regular YouTube URL
+                /youtu\.be\//,  // Short YouTube URL
+                /youtube\.com\/embed\//,  // Embed URL
+            ];
+            
+            const isValidFormat = validPatterns.some(pattern => pattern.test(url));
+            
+            if (!isValidFormat) {
+                showNotification('Invalid YouTube URL format. Please check and try again.');
+                input.focus();
+                return;
+            }
+            
+            // Disable button and show loading state
+            button.disabled = true;
+            button.textContent = 'Adding...';
+            input.disabled = true;
+            
+            try {
+                const response = await fetch('/api/add-video-by-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        url: url
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Clear input
+                    input.value = '';
+                    
+                    // Show success notification
+                    showNotification(`✅ Added "${result.video.title}" to MyTube!`);
+                    
+                    // Reload liked videos to show the new addition
+                    loadLikedVideos();
+                    
+                    // Show model retrained notification if applicable
+                    if (result.model_retrained) {
+                        setTimeout(() => {
+                            showNotification('🤖 AI model updated with your new preference!');
+                        }, 1500);
+                    }
+                } else {
+                    // Handle specific error cases
+                    if (response.status === 409) {
+                        showNotification('⚠️ ' + result.error);
+                    } else if (response.status === 404) {
+                        showNotification('❌ Video not found. Check if it exists and is public.');
+                    } else {
+                        showNotification('❌ ' + (result.error || 'Failed to add video'));
+                    }
+                }
+            } catch (error) {
+                console.error('Error adding video:', error);
+                showNotification('❌ Failed to add video: ' + error.message);
+            } finally {
+                // Re-enable inputs
+                button.disabled = false;
+                button.textContent = 'Add Video';
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        async function cleanupSearches() {
+            const cleanupBtn = document.getElementById('cleanupBtn');
+            const daysInput = document.getElementById('cleanupDays');
+            const daysOld = parseInt(daysInput.value) || 7;
+            
+            if (daysOld < 1) {
+                showNotification('Days must be at least 1');
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to archive search sessions older than ${daysOld} days?`)) {
+                return;
+            }
+            
+            // Disable button during request
+            cleanupBtn.disabled = true;
+            cleanupBtn.textContent = 'Cleaning Up...';
+            
+            try {
+                const response = await fetch('/api/cleanup-searches', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        days_old: daysOld
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification(result.message + ' 🧹');
+                    
+                    // Reload search history to show updated stats
+                    setTimeout(() => {
+                        loadSearchHistory();
+                    }, 1500);
+                } else {
+                    throw new Error(result.error || 'Failed to cleanup searches');
+                }
+            } catch (error) {
+                console.error('Error cleaning up searches:', error);
+                showNotification('Failed to cleanup searches: ' + error.message);
+            } finally {
+                // Re-enable button
+                cleanupBtn.disabled = false;
+                cleanupBtn.textContent = 'Clean Up';
+            }
+        }
+
+        async function performTopicSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const topic = searchInput.value.trim();
+            
+            if (!topic) {
+                showNotification('Please enter a search topic');
+                searchInput.focus();
+                return;
+            }
+            
+            if (topic.length < 3) {
+                showNotification('Search topic must be at least 3 characters');
+                searchInput.focus();
+                return;
+            }
+            
+            // Show loading state
+            searchButton.disabled = true;
+            searchButton.textContent = '🔍 Searching...';
+            
+            // Switch to search results view immediately and show loading
+            switchView('search');
+            document.getElementById('searchBtn').style.display = 'inline-block';
+            
+            const searchVideoGrid = document.getElementById('searchVideoGrid');
+            searchVideoGrid.innerHTML = `
+                <div class="loading" style="grid-column: 1 / -1;">
+                    <div class="loading-spinner"></div>
+                    <div style="margin-top: 16px;">
+                        <div>🤖 Generating search keywords with AI...</div>
+                        <div style="margin-top: 8px; font-size: 14px; color: #aaa;">
+                            Searching YouTube for "${topic}"
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Update status bar
+            const statusBar = document.getElementById('statusBar');
+            statusBar.innerHTML = `
+                <div class="status-learning">
+                    🔍 Searching for "${topic}" • Generating keywords with AI • Finding relevant videos
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/search-topic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        topic: topic
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displaySearchResults(result);
+                    updateSearchStatusBar(result);
+                    showNotification(`Found ${result.total_videos} videos for "${topic}" 🎯`);
+                } else {
+                    throw new Error(result.error || 'Search failed');
+                }
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                displaySearchError(error.message, topic);
+                showNotification('Search failed: ' + error.message);
+            } finally {
+                // Reset search button
+                searchButton.disabled = false;
+                searchButton.textContent = '🔍';
+            }
+        }
+        
+        function displaySearchResults(result) {
+            const searchVideoGrid = document.getElementById('searchVideoGrid');
+            const searchResultsHeader = document.getElementById('searchResultsHeader');
+            const searchSectionTitle = document.getElementById('searchSectionTitle');
+            const searchMetadata = document.getElementById('searchMetadata');
+            
+            // Show header
+            searchResultsHeader.style.display = 'block';
+            
+            // Update title and metadata
+            searchSectionTitle.innerHTML = `
+                Search Results for "${result.topic}"
+                <span class="ai-badge">AI GENERATED</span>
+            `;
+            
+            searchMetadata.innerHTML = `
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+                    <span><strong>${result.total_videos}</strong> videos found</span>
+                    <span><strong>${result.keywords_used.length}</strong> AI-generated keywords</span>
+                    <span>Session ID: <code style="background: #333; padding: 2px 6px; border-radius: 4px; font-size: 12px;">${result.session_id.substring(0, 8)}...</code></span>
+                </div>
+                <details style="margin-top: 10px;">
+                    <summary style="cursor: pointer; color: #3ea6ff;">View Generated Keywords</summary>
+                    <div style="margin-top: 8px; padding: 8px; background: #1a1a1a; border-radius: 6px; font-size: 12px;">
+                        ${result.keywords_used.map(keyword => `<span style="background: #333; padding: 2px 6px; border-radius: 4px; margin: 2px; display: inline-block;">${keyword}</span>`).join('')}
+                    </div>
+                </details>
+            `;
+            
+            if (result.videos.length === 0) {
+                searchVideoGrid.innerHTML = `
+                    <div class="loading" style="grid-column: 1 / -1;">
+                        <div>No videos found for "${result.topic}"</div>
+                        <div style="margin-top: 16px;">
+                            <button class="nav-btn" onclick="clearSearchResults()">Try Another Search</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Display videos
+            searchVideoGrid.innerHTML = result.videos.map(video => `
+                <div class="video-card">
+                    <div class="video-thumbnail" onclick="openVideo('${video.url}')">
+                        <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22180%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22>No Image</text></svg>'">
+                        <div class="confidence-badge" style="background: rgba(0, 212, 170, 0.8); color: white;">
+                            Fresh Search
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title" onclick="openVideo('${video.url}')" style="cursor: pointer;">${video.title}</div>
+                        <div class="video-meta">
+                            <span>${video.channel_name}</span>
+                            <span>•</span>
+                            <span>${video.views_formatted}</span>
+                        </div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn like-btn" onclick="rateVideo('${video.id}', true)" id="like-${video.id}">
+                                👍 Like
+                            </button>
+                            <button class="rating-btn dislike-btn" onclick="rateVideo('${video.id}', false)" id="dislike-${video.id}">
+                                👎 Dislike
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function displaySearchError(errorMessage, topic) {
+            const searchVideoGrid = document.getElementById('searchVideoGrid');
+            const searchResultsHeader = document.getElementById('searchResultsHeader');
+            const searchSectionTitle = document.getElementById('searchSectionTitle');
+            const searchMetadata = document.getElementById('searchMetadata');
+            
+            // Show header
+            searchResultsHeader.style.display = 'block';
+            
+            // Update title
+            searchSectionTitle.innerHTML = `
+                Search Failed
+                <span class="ai-badge" style="background: #ff4444;">ERROR</span>
+            `;
+            
+            searchMetadata.innerHTML = `
+                <div style="color: #ff4444;">
+                    Failed to search for "${topic}": ${errorMessage}
+                </div>
+            `;
+            
+            searchVideoGrid.innerHTML = `
+                <div class="error" style="grid-column: 1 / -1;">
+                    <div style="margin-bottom: 16px;">Search failed: ${errorMessage}</div>
+                    <div style="font-size: 14px; color: #aaa; margin-bottom: 16px;">
+                        Common issues:
+                        <ul style="text-align: left; margin-top: 8px;">
+                            <li>YouTube API quota exceeded</li>
+                            <li>Ollama service not running</li>
+                            <li>Internet connection issues</li>
+                            <li>Invalid search topic</li>
+                        </ul>
+                    </div>
+                    <button class="nav-btn" onclick="clearSearchResults()">Try Again</button>
+                </div>
+            `;
+        }
+        
+        function updateSearchStatusBar(result) {
+            const statusBar = document.getElementById('statusBar');
+            statusBar.innerHTML = `
+                <div class="status-trained">
+                    🎯 Search Complete • Found ${result.total_videos} videos for "${result.topic}" • Using ${result.keywords_used.length} AI keywords
+                </div>
+            `;
+        }
+        
+        function clearSearchResults() {
+            // Hide search results tab and switch back to rating
+            document.getElementById('searchBtn').style.display = 'none';
+            document.getElementById('searchResultsHeader').style.display = 'none';
+            document.getElementById('searchVideoGrid').innerHTML = '';
+            document.getElementById('searchInput').value = '';
+            switchView('rating');
+        }
+        
+        // Add Enter key support for search
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    performTopicSearch();
+                }
+            });
+        });
 
         // Load recommendations when page loads
         document.addEventListener('DOMContentLoaded', loadRecommendations);
@@ -668,6 +1572,8 @@
                 loadRecommendations();
             } else if (currentView === 'liked') {
                 loadLikedVideos();
+            } else if (currentView === 'history') {
+                loadSearchHistory();
             }
         }, 300000);
     </script>
