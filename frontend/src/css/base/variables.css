@@ -1,0 +1,63 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  /* Colors */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #212121;
+  --bg-tertiary: #333;
+  --text-primary: #ffffff;
+  --text-secondary: #aaa;
+  --text-muted: #999;
+  
+  /* Brand Colors */
+  --brand-primary: #ff6b35;
+  --brand-secondary: #1976d2;
+  
+  /* Status Colors */
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #f44336;
+  --info: #2196f3;
+  
+  /* Confidence Badge Colors */
+  --confidence-high: #4caf50;
+  --confidence-medium: #ff9800;
+  --confidence-low: #f44336;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Typography */
+  --font-family: "Roboto", sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-xxl: 24px;
+  
+  /* Layout */
+  --header-height: 60px;
+  --status-bar-height: 50px;
+  --max-content-width: 1200px;
+}

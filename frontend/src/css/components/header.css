@@ -1,0 +1,121 @@
+/* Header Component Styles */
+.header {
+  background-color: var(--bg-secondary);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bg-tertiary);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(45deg, #ff0000, #cc0000);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: var(--font-size-lg);
+}
+
+.logo-text {
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+}
+
+/* Search Container */
+.search-container {
+  flex-grow: 1;
+  max-width: 640px;
+  margin: 0 40px;
+  display: flex;
+}
+
+.search-box {
+  flex-grow: 1;
+  padding: var(--spacing-md);
+  border: 1px solid var(--bg-tertiary);
+  border-radius: 40px 0 0 40px;
+  background-color: #121212;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.search-box:focus {
+  border-color: #3ea6ff;
+}
+
+.search-button {
+  padding: var(--spacing-md) 20px;
+  border: 1px solid var(--bg-tertiary);
+  border-left: none;
+  border-radius: 0 40px 40px 0;
+  background-color: #222;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background-color var(--transition-fast);
+}
+
+.search-button:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* Navigation Buttons */
+.nav-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.nav-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--bg-tertiary);
+  border-radius: 20px;
+  background-color: #222;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+}
+
+.nav-btn:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.nav-btn.active {
+  background-color: #ff0000;
+  border-color: #ff0000;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .search-container {
+    margin: 0 var(--spacing-md);
+    max-width: none;
+  }
+  
+  .header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}

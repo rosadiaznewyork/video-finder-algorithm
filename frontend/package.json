@@ -1,0 +1,28 @@
+{
+  "name": "mytube-frontend",
+  "version": "1.0.0",
+  "description": "Vue 3 frontend for MyTube video recommendation app",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .js,.vue",
+    "lint:fix": "eslint src --ext .js,.vue --fix"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
+    "postcss": "^8.4.32",
+    "vite": "^5.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vue": "^3.5.20"
+  }
+}

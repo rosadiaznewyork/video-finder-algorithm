@@ -1,1 +1,0 @@
-# Rating system operations package

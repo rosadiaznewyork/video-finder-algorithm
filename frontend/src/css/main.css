@@ -1,0 +1,11 @@
+/* Main CSS Entry Point */
+
+/* Base Styles */
+@import './base/variables.css';
+@import './base/reset.css';
+
+/* Component Styles */
+@import './components/header.css';
+@import './components/status-bar.css';
+@import './components/video-card.css';
+@import './components/layout.css';

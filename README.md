@@ -1,112 +1,108 @@
-# Video Inspiration Finder 🎯
+# MyTube - Video Inspiration Finder 🎯
 
-An intelligent YouTube video recommendation system that learns your preferences to suggest coding videos you'll love. Built with machine learning and featuring a beautiful web dashboard.
+An intelligent YouTube video recommendation system that learns your preferences to suggest videos you'll love. Built with **Vue 3 + Flask API architecture**, machine learning, and featuring a modern reactive web dashboard.
 
 ![Python](https://img.shields.io/badge/python-v3.7+-blue.svg)
+![Vue](https://img.shields.io/badge/vue-v3.4+-green.svg)
+![Node](https://img.shields.io/badge/node-v18+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
 
-## 🌟 Features
-
-- 🔍 **Smart YouTube Search**: Automatically finds trending coding videos using configurable search queries
-- 🤖 **Machine Learning Recommendations**: RandomForest model learns your preferences from ratings
-- 📊 **Beautiful Web Dashboard**: YouTube-like interface with AI confidence scores
-- 🔒 **Privacy First**: All data stored locally in SQLite - no external tracking
-- ⚡ **One-Command Setup**: Get started with a single command
-- 📱 **Responsive Design**: Works perfectly on desktop and mobile
-- 🎯 **Real-time Learning**: Model updates instantly as you rate more videos
-
 ## 🚀 Quick Start
 
-### Option 1: Web Dashboard (Recommended)
-```bash
-git clone https://github.com/yourusername/video-idea-finder-algorithm.git
-cd video-idea-finder-algorithm
-./setup.sh
-# Select option 1 for Dashboard
-```
+### Prerequisites
 
-### Option 2: Command Line Interface
-```bash
-./setup.sh
-# Select option 2 for CLI mode
-```
-
-The setup script will:
-1. Create a Python virtual environment
-2. Install all dependencies
-3. Help you configure your YouTube API key
-4. Launch your preferred interface
-
-## 📋 Prerequisites
-
-- **Python 3.7+**
+- **Python 3.7+** and **Node.js 18+**
 - **YouTube Data API v3 Key** (free from [Google Cloud Console](https://console.cloud.google.com/))
 
-## ⚙️ Configuration
+### Installation
+
+```bash
+git clone https://github.com/yourusername/mytube.git
+cd mytube
+
+# 1. Install Python dependencies
+python app.py install
+
+# 2. Install frontend dependencies
+cd frontend && npm install && cd ..
+
+# 3. Start the application
+python app.py
+```
+
+The app will automatically:
+
+1. Build the Vue 3 frontend if needed
+2. Search for and load initial videos
+3. Open your browser to the dashboard
+
+### Setup
 
 1. **Get YouTube API Key**:
+
    - Visit [Google Cloud Console](https://console.cloud.google.com/)
    - Create a project or select existing one
    - Enable YouTube Data API v3
    - Create credentials (API key)
 
 2. **Set up environment**:
+
    ```bash
    # Copy the example environment file
    cp .env.example .env
-   
+
    # Edit .env and add your API key
    YOUTUBE_API_KEY=your_actual_api_key_here
    ```
 
-3. **Add your search queries**:
-   - Edit `src/youtube/search.py` in the `get_coding_search_queries()` function
-   - Add search terms relevant to your interests
+3. **Customize your search queries**:
+   - Edit `config/search_queries.json` to add search terms relevant to your interests
    - Example: `"python machine learning"`, `"react tutorial"`, etc.
 
-## 🏗️ Project Structure
+## 🛠️ Development Modes
 
+### **Production Mode** (Default)
+
+```bash
+python app.py
+# → Serves built Vue SPA + Flask API
+# → Single command, production-ready
 ```
-video-idea-finder-algorithm/
-├── src/
-│   ├── database/           # SQLite database operations
-│   │   ├── manager.py      # Database setup and schema
-│   │   ├── video_operations.py    # Video data CRUD
-│   │   └── preference_operations.py # User ratings CRUD
-│   ├── youtube/            # YouTube API integration
-│   │   ├── search.py       # Video search functionality
-│   │   ├── details.py      # Video metadata retrieval
-│   │   └── utils.py        # Helper functions
-│   ├── ml/                # Machine learning pipeline
-│   │   ├── feature_extraction.py  # Video feature engineering
-│   │   ├── model_training.py      # ML model management
-│   │   └── predictions.py         # Recommendation engine
-│   └── rating/            # Interactive rating system
-│       ├── display.py      # Video information display
-│       ├── session.py      # Rating session management
-│       └── user_input.py   # User interaction handling
-├── templates/             # Web dashboard frontend
-│   └── dashboard.html     # Single-page application
-├── main.py               # CLI application entry point
-├── dashboard_api.py      # Web API server
-├── run_dashboard.py      # Dashboard launcher
-├── search_more_videos.py # Additional video search utility
-├── setup.sh             # Automated setup script
-├── .env.example         # Environment template
-└── README.md           # This file
+
+### **Frontend Development** (Hot Reload)
+
+```bash
+cd frontend && npm run dev
+# → http://localhost:3000 with instant updates
+# → Auto-proxies API calls to Flask backend
+# → Start Flask separately: python app.py --port 8000
+```
+
+### **Vue Development Mode**
+
+```bash
+python app.py dev
+# → Vue development server with hot reload
+# → Start Flask API separately: python app.py --port 8000
+
+python app.py run --dev
+# → Alternative way to start Vue dev server
 ```
 
 ## 🧠 How the AI Works
 
 ### Feature Engineering
+
 The system extracts 11 key features from each video:
+
 - **Content Features**: Title length, description length, keyword presence
 - **Engagement Metrics**: View count, like ratio, engagement score
 - **Semantic Analysis**: Title sentiment, tutorial/beginner/AI keyword detection
 - **Behavioral Patterns**: Time constraints, challenge keywords
 
 ### Machine Learning Pipeline
+
 1. **Data Collection**: YouTube API provides video metadata
 2. **Feature Extraction**: Convert raw video data into numerical features
 3. **User Feedback**: Collect like/dislike ratings with optional notes
@@ -114,54 +110,98 @@ The system extracts 11 key features from each video:
 5. **Prediction**: Generate confidence scores for new videos
 
 ### Learning Process
+
 - **Cold Start**: Shows random videos until you have 10+ ratings
 - **Warm Start**: AI model activates and provides personalized recommendations
 - **Continuous Learning**: Model retrains after each new rating
 
 ## 🖥️ Available Commands
 
+### Main Commands
+
 ```bash
-# Full interactive setup
-./setup.sh
+# First-time setup (Python + Node.js dependencies)
+python app.py install
 
-# CLI-only mode
-python main.py
+# Start complete application (default)
+python app.py
+# → Builds Vue frontend if needed
+# → Starts Flask API server
+# → Opens browser automatically
 
-# Web dashboard
-python run_dashboard.py
+# Search for additional videos (optional)
+python app.py search
 
-# Search for additional videos
-python search_more_videos.py
-
-# Start API server directly
-python dashboard_api.py
+# Custom Flask options
+python app.py --port 3000 --debug --no-browser
 ```
 
-## 🎨 Dashboard Features
+## 🚀 Deployment Options
 
-- **YouTube-like Interface**: Familiar grid layout with thumbnails
-- **AI Confidence Scores**: See how confident the AI is about each recommendation
-- **Real-time Feedback**: Rate videos with instant visual feedback
-- **Model Status**: Track learning progress and training status
-- **Liked Videos**: Review your previously liked videos
-- **Responsive Design**: Perfect on any screen size
+### **Option 1: Monolithic (Current)**
+
+```bash
+python app.py
+# → Single command serves both Vue SPA and Flask API
+# → Perfect for local development and simple deployment
+```
+
+### **Option 2: Separate Deployment (Future)**
+
+```bash
+# Frontend: Deploy to CDN/Static hosting (Vercel, Netlify)
+cd frontend && npm run build
+# → Deploy dist/ folder to static hosting
+
+# Backend: Deploy to API server (Railway, Heroku)
+# → Deploy Flask API independently
+# → Update frontend API URLs
+```
+
+### **Option 3: Containerized**
+
+```dockerfile
+# Dockerfile example for complete app
+FROM node:18 AS frontend
+COPY frontend/ /app/frontend/
+RUN cd /app/frontend && npm install && npm run build
+
+FROM python:3.9
+COPY . /app/
+COPY --from=frontend /app/frontend/dist /app/frontend/dist
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+```
 
 ## 🔧 Customization
 
 ### Search Queries
-Edit the search queries in `src/youtube/search.py`:
-```python
-def get_coding_search_queries() -> List[str]:
-    return [
-        "python machine learning tutorial",
-        "javascript react project",
-        "web development 2024",
-        # Add your own search terms
-    ]
+
+Edit the search queries in `config/search_queries.json`:
+
+```json
+{
+  "search_queries": [
+    "python machine learning tutorial",
+    "javascript react project",
+    "web development 2024",
+    "coding interview prep",
+    "system design tutorial",
+    "database optimization"
+  ]
+}
 ```
 
+The system intelligently uses different queries for different purposes:
+
+- **Initial search**: Uses the first few queries when the app starts
+- **More videos**: Uses remaining queries when you need more videos to rate
+- **Smart rotation**: Automatically avoids repeating the same searches
+
 ### ML Model Parameters
+
 Modify model settings in `src/ml/model_training.py`:
+
 ```python
 model = RandomForestClassifier(
     n_estimators=100,        # Number of trees
@@ -183,19 +223,54 @@ We welcome contributions! Here's how you can help:
 6. **Open a Pull Request**
 
 ### Development Setup
+
 ```bash
 # Clone your fork
-git clone https://github.com/yourusername/video-idea-finder-algorithm.git
+git clone https://github.com/yourusername/mytube.git
+cd mytube
 
-# Create development environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Backend setup
+python app.py install
 
-# Install dependencies
-pip install -r requirements.txt
+# Frontend setup
+cd frontend
+npm install
+cd ..
 
-# Run tests (if available)
-python -m pytest
+# Start development environment
+python3 dev.py --mode dev
+# → Starts both Vue dev server (hot reload) and Flask API
+```
+
+### Vue 3 Component Development
+
+```vue
+<!-- Example: Creating a new component -->
+<template>
+  <div class="my-component">
+    <h2>{{ title }}</h2>
+    <button @click="handleClick">{{ buttonText }}</button>
+  </div>
+</template>
+
+<script>
+import { ref } from "vue";
+
+export default {
+  name: "MyComponent",
+  props: ["title"],
+  emits: ["custom-event"],
+  setup(props, { emit }) {
+    const buttonText = ref("Click me");
+
+    const handleClick = () => {
+      emit("custom-event", { message: "Hello from component!" });
+    };
+
+    return { buttonText, handleClick };
+  },
+};
+</script>
 ```
 
 ## 📝 License
@@ -204,47 +279,102 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
+- **Vue 3** for the reactive frontend framework
+- **Vite** for the lightning-fast build system
+- **Flask** for the clean API backend
 - **YouTube Data API v3** for video data
 - **scikit-learn** for machine learning capabilities
-- **Flask** for the web framework
 - **SQLite** for local data storage
 
 ## 📚 Learn More
 
 This project demonstrates several key concepts:
-- **API Integration**: YouTube Data API v3 usage
-- **Machine Learning**: Feature engineering and model training
-- **Web Development**: Flask API and responsive frontend
-- **Database Design**: SQLite schema and operations
-- **DevOps**: Environment management and deployment
 
-Perfect for learning about ML-powered recommendation systems!
+### **Frontend Development**
+
+- **Vue 3 Composition API**: Modern reactive programming
+- **Component Architecture**: Reusable, maintainable UI components
+- **Modern Build Tools**: Vite with hot reload and optimization
+- **SPA Development**: Single Page Application patterns
+
+### **Backend Development**
+
+- **API Design**: RESTful Flask API architecture
+- **Machine Learning**: Feature engineering and model training
+- **Database Design**: SQLite schema and operations
+
+### **Full-Stack Integration**
+
+- **API Integration**: Frontend-backend communication
+- **Development Workflow**: Hot reload, build processes, deployment
+- **Modern Architecture**: Separation of concerns, scalable structure
+
+Perfect for learning about **modern full-stack development** with ML-powered features!
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-**API Key Issues**:
-- Ensure your YouTube API key is valid and has quota remaining
-- Check that YouTube Data API v3 is enabled in Google Cloud Console
+**Frontend Build Issues**:
+
+```bash
+# Frontend not building
+cd frontend && npm install && npm run build
+
+# Vue dev server not starting
+cd frontend && npm run dev
+# → Check if port 3000 is available
+```
+
+**Backend Issues**:
+
+```bash
+# Virtual environment issues
+python app.py install  # Recreates venv and installs dependencies
+
+# API key issues
+# → Ensure YouTube API key is valid in .env file
+# → Check quota remaining in Google Cloud Console
+```
+
+**Development Server Issues**:
+
+```bash
+# Vue dev server not starting
+python app.py dev  # Start Vue development server
+
+# Port conflicts
+python app.py --port 9000  # Use different port
+```
 
 **Database Issues**:
-- Delete `video_inspiration.db` to reset the database
-- Run `./setup.sh` again to reinitialize
 
-**Import Errors**:
-- Activate the virtual environment: `source venv/bin/activate`
-- Reinstall dependencies: `pip install -r requirements.txt`
+```bash
+# Reset database
+rm video_inspiration.db
+python app.py  # Will recreate and populate database
+```
 
-**Port Conflicts**:
-- Dashboard runs on port 5001 by default
-- Change the port in `dashboard_api.py` if needed
+### Architecture Questions
+
+**"Why do I need Node.js for a Python app?"**
+
+- Frontend is now a Vue 3 SPA that needs to be built
+- Node.js is only needed for frontend development and building
+- Production deployment can serve pre-built assets
+
+**"Can I deploy frontend and backend separately?"**
+
+- Yes! Frontend builds to static files that can be deployed anywhere
+- Backend is a pure API that can run independently
+- See deployment options section above
 
 ### Need Help?
 
 - 📧 Open an issue on GitHub
 - 💬 Check existing issues for solutions
 - 🔍 Review the troubleshooting section above
+- 📖 Check the Vue 3 and Flask documentation
 
 ---
 

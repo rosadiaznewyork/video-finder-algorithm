@@ -1,0 +1,50 @@
+/* Status Bar Component Styles */
+.status-bar {
+  background-color: #1a1a1a;
+  padding: var(--spacing-md);
+  text-align: center;
+  border-bottom: 1px solid var(--bg-tertiary);
+  height: var(--status-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-trained {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.status-learning {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+/* Loading States */
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--bg-tertiary);
+  border-top: 4px solid #ff0000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
