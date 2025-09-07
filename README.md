@@ -20,8 +20,8 @@ An intelligent YouTube video recommendation system that learns your preferences 
 
 ### Option 1: Web Dashboard (Recommended)
 ```bash
-git clone https://github.com/yourusername/video-idea-finder-algorithm.git
-cd video-idea-finder-algorithm
+git clone https://github.com/rosadiaznewyork/video-idea-finder-algorithm.git
+cd video-finder-algorithm
 ./setup.sh
 # Select option 1 for Dashboard
 ```
