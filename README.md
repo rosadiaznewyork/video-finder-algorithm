@@ -38,6 +38,23 @@ The setup script will:
 3. Help you configure your YouTube API key
 4. Launch your preferred interface
 
+### Option 3: Docker
+```bash
+docker build -t video-finder-algorithm:latest .
+docker run -d \
+  --name video-finder \
+  -p 5001:5001 \
+  -v $(pwd):/app \
+  --env YOUTUBE_API_KEY=your_actual_api_key_here \
+  video-finder-algorithm:latest
+```
+
+### Option 4: Docker Compose
+```bash
+docker compose up -d
+```
+
+
 ## 📋 Prerequisites
 
 - **Python 3.7+**
