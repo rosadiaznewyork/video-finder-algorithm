@@ -86,7 +86,7 @@ class VideoInspirationFinderApp:
 
     def _try_train_model(self):
         if not self.model_trained:
-            if not self.model:
+            if self.model is None:
                 self.model = create_recommendation_model()
             
             training_data = get_training_data_from_database(self.db_path)
