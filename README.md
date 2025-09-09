@@ -34,43 +34,11 @@ Select option 1 for web dashboard (recommended).
    ./setup.sh
    ```
 
-## Available Commands
-
-```bash
-# Interactive setup menu
-./setup.sh
-
-# Web dashboard
-python3 dashboard_api.py
-
-# CLI mode
-python3 main.py
-
-# Search for more videos
-python3 search_more_videos.py
-```
-
 ## Web Dashboard
 
 - Access at: http://localhost:5001
 - YouTube-like interface with AI confidence scores
 - Rate videos to train the AI model
-
-## Manual Setup
-
-If you prefer manual setup:
-
-```bash
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install requests pandas scikit-learn numpy python-dotenv flask flask-cors
-
-# Run dashboard
-python3 dashboard_api.py
-```
 
 ## Troubleshooting
 
