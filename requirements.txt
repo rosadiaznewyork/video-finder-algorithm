@@ -1,0 +1,6 @@
+Flask==3.1.2
+flask_cors==6.0.1
+pandas==2.3.2
+python-dotenv==1.1.1
+Requests==2.32.5
+scikit_learn==1.7.2
